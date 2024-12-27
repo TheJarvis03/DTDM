@@ -41,8 +41,8 @@
         $diem = $_POST['diem'];
 
         // Chuẩn bị và thực thi câu lệnh SQL
-        $stmt = $conn->prepare("INSERT INTO diem (masv, mamonhoc, diem) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $masv, $mamonhoc, $diem);
+        $sql = "INSERT INTO Diem (MaSV, MaMonHoc, Diem) VALUES ($masv, $mamonhoc, $diem)";
+        $result = $conn->query($sql);
 
         if ($stmt->execute()) {
             echo "Thêm điểm thành công.";
