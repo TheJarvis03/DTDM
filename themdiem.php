@@ -6,7 +6,7 @@
 <body>
     <h2>Thêm Điểm Sinh Viên</h2>
 
-    <form method="post" action="xemdiem.php">
+    <form method="post" action="themdiem.php">
         <label for="masv">Mã Sinh Viên:</label>
         <input type="text" id="masv" name="masv" required><br>
 
