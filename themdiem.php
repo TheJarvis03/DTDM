@@ -13,8 +13,8 @@
         <label for="mamonhoc">Mã Môn Học:</label>
         <input type="text" id="mamonhoc" name="mamonhoc" required><br>
 
-        <label for="mamonhoc">Điểm:</label>
-        <input type="text" id="mamonhoc" name="mamonhoc" required><br>
+        <label for="diem">Điểm:</label>
+        <input type="text" id="diem" name="diem" required><br>
 
         <input type="submit" value="Thêm điểm">
     </form>
@@ -26,6 +26,7 @@
     $password = "12345678";
     $database = "myDB";
 
+    // Tạo kết nối
     $conn = new mysqli($servername, $username, $password, $database);
 
     // Kiểm tra kết nối
@@ -33,26 +34,25 @@
         die("Kết nối thất bại: " . $conn->connect_error);
     }
 
-    // Xử lý khi nhận form submit
+    // Xử lý dữ liệu khi form được submit
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $masv = $_POST["masv"];
-        $mamonhoc = $_POST["mamonhoc"];
-        $diem = $_POST["diem"];
+        $masv = $_POST['masv'];
+        $mamonhoc = $_POST['mamonhoc'];
+        $diem = $_POST['diem'];
 
-        // Truy vấn điểm của sinh viên
-        $sql = "INSERT INTO Diem (MaSV, MaMonHoc, Diem) VALUES ('$masv', '$mamonhoc', '$diem')";
-        $result = $conn->query($sql);
+        // Chuẩn bị và thực thi câu lệnh SQL
+        $stmt = $conn->prepare("INSERT INTO diem (masv, mamonhoc, diem) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $masv, $mamonhoc, $diem);
 
-        if ($result->num_rows > 0) {
-            // Hiển thị điểm của sinh viên
-            $row = $result->fetch_assoc();
-            echo "Điểm đã được thêm";
+        if ($stmt->execute()) {
+            echo "Thêm điểm thành công.";
         } else {
-            echo "Không thể thêm điểm cho sinh viên có Mã SV: $masv và Mã Môn Học: $mamonhoc";
+            echo "Lỗi: " . $stmt->error;
         }
+
+        $stmt->close();
     }
 
-    // Đóng kết nối
     $conn->close();
     ?>
 </body>
